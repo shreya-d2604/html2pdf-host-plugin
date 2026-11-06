@@ -1,0 +1,39 @@
+package wasmcloud:html2pdf@0.1.0;
+
+/// Turns an HTML document into a PDF. The host lays the document out itself,
+/// in Rust, without a browser.
+interface converter {
+  /// How to lay out the pages. Every field is optional.
+  record options {
+    /// The page width, in millimeters. Default: 210 (A4).
+    page-width: option<f32>,
+    /// The page height, in millimeters. Default: 297 (A4).
+    page-height: option<f32>,
+    /// One margin for all four sides, in millimeters. Default: 0.
+    margin: option<f32>,
+    /// Writes "Page X of Y" at the bottom of each page. Default: false.
+    page-numbers: option<bool>,
+    /// Text at the top of each page. Default: none.
+    header: option<string>,
+    /// Text at the bottom of each page. Default: none.
+    footer: option<string>,
+  }
+
+  /// Why a document was not converted.
+  variant convert-error {
+    /// An option is out of range, with the reason.
+    invalid-options(string),
+    /// The layout did not finish within the host's time limit.
+    timeout,
+    /// The document could not be laid out, with the reason.
+    failed(string),
+  }
+
+  /// Lays out `html` and returns the bytes of the PDF.
+  ///
+  /// The layout engine handles basic HTML and CSS: text, tables and page
+  /// breaks. It loads nothing by URL, so images, external stylesheets and web
+  /// fonts are left out, and scripts do not run. Put styles in a `<style>`
+  /// element. Text uses the fonts installed on the host.
+  convert: func(html: string, options: options) -> result<list<u8>, convert-error>;
+}

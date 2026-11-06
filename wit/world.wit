@@ -1,0 +1,5 @@
+package local:host;
+
+world html2pdf {
+    import wasmcloud:html2pdf/converter@0.1.0;
+}

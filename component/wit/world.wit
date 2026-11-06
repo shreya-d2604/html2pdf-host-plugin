@@ -1,0 +1,6 @@
+package wasmcloud:test-html2pdf@0.1.0;
+
+world component {
+    import wasmcloud:html2pdf/converter@0.1.0;
+    export wasi:http/incoming-handler@0.2.2;
+}
